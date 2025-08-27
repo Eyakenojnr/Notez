@@ -4,8 +4,21 @@
         <title>Notez</title>
     </head>
     <body>
-        <div>Notez: <a href="/index">Home</a></div>
+        <div>
+            <a href="{{ url_for('index') }}">Notez</a>
+        </div>
         <hr>
+
+		<!-- Flash message -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                	<li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        {% endwith %}
         {% block content %}{% endblock %}
     </body>
 </html>
