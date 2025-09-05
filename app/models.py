@@ -38,7 +38,10 @@ class User(db.Model):
     created_at: so.Mapped[datetime] = so.mapped_column(
         sa.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at: so.Mapped[datetime] = so.mapped_column(
-        sa.DateTime(timezone=True), onupdate=lambda: datetime.now(timezone.utc))
+        sa.DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc)
+    )
     
     # Relationships
     notes: so.Mapped[List["Note"]] = so.relationship(
@@ -65,7 +68,10 @@ class Note(db.Model):
     created_at: so.Mapped[datetime] = so.mapped_column(
         sa.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at: so.Mapped[datetime] = so.mapped_column(
-        sa.DateTime(timezone=True), onupdate=lambda: datetime.now(timezone.utc))
+        sa.DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc)
+    )
     deleted_at: so.Mapped[datetime | None] = so.mapped_column(
         sa.DateTime(timezone=True), nullable=True)
     
@@ -94,7 +100,10 @@ class Group(db.Model):
     created_at: so.Mapped[datetime] = so.mapped_column(
         sa.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at: so.Mapped[datetime] = so.mapped_column(
-        sa.DateTime(timezone=True), onupdate=lambda: datetime.now(timezone.utc))
+        sa.DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc)
+    )
     deleted_at: so.Mapped[datetime | None] = so.mapped_column(
         sa.DateTime(timezone=True), nullable=True)
     
@@ -120,7 +129,10 @@ class ToDoList(db.Model):
     created_at: so.Mapped[datetime] = so.mapped_column(
         sa.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at: so.Mapped[datetime] = so.mapped_column(
-        sa.DateTime(timezone=True), onupdate=lambda: datetime.now(timezone.utc))
+        sa.DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc)
+    )
     deleted_at: so.Mapped[datetime | None] = so.mapped_column(
         sa.DateTime(timezone=True), nullable=True)
     
