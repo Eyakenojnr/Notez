@@ -63,7 +63,7 @@ class Note(db.Model):
 
     __tablename__ = 'note'
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    title: so.Mapped[str] = so.mapped_column(sa.String(200))
+    title: so.Mapped[str] = so.mapped_column(sa.String(200), nullable=True)
     content: so.Mapped[str] = so.mapped_column(sa.Text)
     created_at: so.Mapped[datetime] = so.mapped_column(
         sa.DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
