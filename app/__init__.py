@@ -15,6 +15,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Flask-Login initialization
-login = LoginManager()
+login = LoginManager(app)
+login.login_view = 'index'  # Tell Flask-Login the view function that handles logins
 
 from app import routes, models
