@@ -6,6 +6,9 @@
     <body>
         <div>
             <a href="{{ url_for('index') }}">Notez</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('logout')}}">Logout</a>
+            {% endif %}
         </div>
         <hr>
 
