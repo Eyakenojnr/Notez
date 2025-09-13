@@ -7,7 +7,17 @@ from app import db, login
 from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from hashlib import md5
+import enum
 
+
+class GenderEnum(enum.Enum):
+    """Enum class.
+    """
+
+    male = 'male'
+    female = 'female'
+    other = 'other'
 
 # --- Association Tables for Many-to-Many Relationships ---
 note_tag_association = sa.Table(
@@ -39,6 +49,10 @@ class User(UserMixin, db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     first_name: so.Mapped[str] = so.mapped_column(sa.String(80))
     last_name: so.Mapped[str] = so.mapped_column(sa.String(80))
+    gender: so.Mapped[GenderEnum] = so.mapped_column(
+        sa.Enum(GenderEnum, name='gender_enum', native_enum=False),
+        nullable=True
+    )
     username: so.Mapped[str] = so.mapped_column(sa.String(80), index=True, unique=True)
     email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True)
     password_hash: so.Mapped[str] = so.mapped_column(sa.String(256))
@@ -68,6 +82,23 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def avatar(self, size=128):
+        """Generates a gender-specific avatar using the DiceBear API.
+        Uses a neutral style if gender is not specified.
+        """
+        # Use username as unique seed for the avatar
+        seed = self.username.lower()
+
+        style = "adventurer"
+
+        if self.gender in [GenderEnum.male, GenderEnum.female]:
+            gender_option = f"&gender={self.gender.value}"
+            return f"https://api.dicebear.com/8.x/{style}/svg?seed={seed}{gender_option}&size={size}"
+        else:
+            initials = (self.first_name[0] + self.last_name[0]).upper()
+            return f"https://api.dicebear.com/8.x/initials/svg?seed={initials}&size={size}&background-color=00897b,00acc1,26a69a"
+
     
 
 class Note(db.Model):
