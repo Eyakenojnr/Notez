@@ -1,0 +1,14 @@
+# Flask Web Framework
+Flask
+Flask-Migrate
+Flask-SQLAlchemy
+Flask-WTF
+
+# Utilities
+python-dotenv   # For loading .env and .flaskenv files
+Faker           # For the database seeding script
+email-validator # For email validation in forms
+
+# API Support
+Flask-Cors
+Flask-JWT-Extended

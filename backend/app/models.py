@@ -1,13 +1,11 @@
-"""Database models for the Notez application.
+"""Database models for Notez app.
 """
 from typing import List, Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from app import db, login
+from app import db
 from datetime import datetime, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
-from hashlib import md5
 import enum
 
 
@@ -36,12 +34,10 @@ todolist_tag_association = sa.Table(
 
 
 # --- Main Model Classes ---
-class User(UserMixin, db.Model):
+class User(db.Model):
     """User database model.
 
     Args:
-        UserMixin (class): Class that includes safe implementations of flask_login 
-            requirements for user model classes.
         db (class): Base class.
     """
 
@@ -244,16 +240,3 @@ class Tag(db.Model):
     
     def __repr__(self):
         return f'<Tag {self.name}>'
-    
-
-@login.user_loader
-def load_user(id):
-    """User loader function.
-
-    Args:
-        id (string): ID of user to be loaded.
-
-    Returns:
-        object: Returns a User object or None.
-    """
-    return db.session.get(User, int(id))

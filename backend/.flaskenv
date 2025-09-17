@@ -1,1 +1,2 @@
 FLASK_APP=notez.py
+FLASK_DEBUG=1
