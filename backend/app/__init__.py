@@ -1,6 +1,7 @@
 import os
 import logging
 from config import Config
+from dotenv import load_dotenv
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -9,6 +10,11 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from logging.handlers import RotatingFileHandler
 
+
+# Find absolute path of the root of the backend directory
+basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+# Load the .env file from that directory
+load_dotenv(os.path.join(basedir, '.env'))
 
 # Extension Initialization (Decoupled)
 db = SQLAlchemy()
