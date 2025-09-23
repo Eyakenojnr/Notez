@@ -4,7 +4,7 @@ from app.forms import SignupForm
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 import sqlalchemy as sa
-from app.models import User, GenderEnum
+from app.models import User, GenderEnum, Note
 
 
 # ------ Authentication API Endpoints -------
@@ -81,6 +81,70 @@ def get_me():
         'created_at': user.created_at.isoformat()
     }
     return jsonify(user_data)
+
+
+# ------ Notes API Endpoints --------
+
+@bp.route('/notes', methods=['POST'])
+@jwt_required()
+def create_note():
+    """Creates a new note for the currently authenticated user.
+    """
+    current_user_id = get_jwt_identity()
+    user = db.session.get(User, current_user_id)
+
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Request body must be JSON"}), 400
+    
+    title = data.get('title')  # Can be None or an empty string
+    content = data.get('content')  # Can be None
+
+    if not title and not content:
+        return jsonify({
+            "error": "Validation Error",
+            "message": "A note must have either a title or content."
+        }), 400
+    
+    new_note = Note(
+        title=title,
+        content=content,
+        author=user,
+        group_id=data.get('group_id')  # Optional group assignment
+    )
+    db.session.add(new_note)
+    db.session.commit()
+
+    return jsonify({
+        'id': new_note.id,
+        'title': new_note.title,
+        'content': new_note.content,
+        'created_at': new_note.created_at.isoformat()
+    }), 201
+
+
+@bp.route('/notes', methods=['GET'])
+@jwt_required()
+def get_notes():
+    """Retrieves all notes for the currently authenticated user.
+    """
+    current_user_id = get_jwt_identity()
+
+    notes_query = db.session.execute(
+        sa.select(Note).where(Note.user_id == current_user_id).order_by(Note.updated_at.desc())
+    ).scalars().all()
+
+    notes_list = [
+        {
+            'id': note.id,
+            'title': note.title,
+            'content': note.content,
+            'updated_at': note.updated_at.isoformat()
+        }
+        for note in notes_query
+    ]
+
+    return jsonify(notes_list)
 
 # @bp.route('/hello')
 # def hello():
