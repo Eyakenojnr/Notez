@@ -1,0 +1,33 @@
+###
+# @name RegisterUser
+# Creates a new user account.
+POST http://127.0.0.1:5000/api/auth/register
+Content-Type: application/json
+
+{
+    "username": "lmao",
+    "email": "lmao@email.com",
+    "password": "@Password123",
+    "password2": "@Password123",
+    "first_name": "Lee",
+    "last_name": "Mahoo",
+    "gender": "male"
+}
+
+###
+# @name LoginUser
+# Logs in a user and captures the access token.
+POST http://127.0.0.1:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "lmao",
+    "password": "@Password123"
+}
+
+###
+# @name GetMyProfile
+# Retrieves profile of the logged-in user.
+# NOTE: Manually copy token from the LoginUser response and paste here.
+GET http://127.0.0.1:5000/api/auth/me
+Authorization: Bearer <TOKEN>
